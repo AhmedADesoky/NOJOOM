@@ -1,0 +1,66 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: |
+            Frontend/nojoom-frontend/package-lock.json
+            Frontend/nojoom-admin-frontend/package-lock.json
+
+      # ── Build nojoom-frontend ──────────────────────────────────────────────
+      - name: Install nojoom-frontend dependencies
+        working-directory: Frontend/nojoom-frontend
+        run: npm ci
+
+      - name: Build nojoom-frontend
+        working-directory: Frontend/nojoom-frontend
+        run: npm run build
+
+      # ── Build nojoom-admin-frontend ────────────────────────────────────────
+      - name: Install admin dependencies
+        working-directory: Frontend/nojoom-admin-frontend
+        run: npm ci
+
+      - name: Build nojoom-admin-frontend
+        working-directory: Frontend/nojoom-admin-frontend
+        run: npm run build
+
+      # ── Combine outputs ────────────────────────────────────────────────────
+      - name: Prepare deploy folder
+        run: |
+          mkdir -p deploy
+          # Main site at /NOJOOM_Website/
+          cp -r Frontend/nojoom-frontend/out/. deploy/
+          # Admin at /NOJOOM_Website/admin/
+          mkdir -p deploy/admin
+          cp -r Frontend/nojoom-admin-frontend/out/. deploy/admin/
+          # GitHub Pages needs a .nojekyll file to serve _ prefixed files
+          touch deploy/.nojekyll
+
+      # ── Deploy ────────────────────────────────────────────────────────────
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'deploy: ${{ github.sha }}'
