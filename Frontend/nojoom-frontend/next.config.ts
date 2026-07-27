@@ -2,7 +2,7 @@
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
-  basePath: '/NOJOOM_Website',
+  basePath: '/NOJOOM',
   images: {
     unoptimized: true,
     remotePatterns: [

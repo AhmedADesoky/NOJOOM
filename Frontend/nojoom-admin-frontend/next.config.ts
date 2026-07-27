@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: 'export',
   trailingSlash: true,
-  basePath: '/NOJOOM_Website/admin',
+  basePath: '/NOJOOM/admin',
   images: { unoptimized: true },
 };
 
