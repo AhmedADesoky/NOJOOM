@@ -82,9 +82,17 @@ export const Footer_Section = () => {
             <div className="font-Display text-xl font-semibold text-Ink leading-none">نجوم</div>
             <div className="font-Body text-[9px] tracking-[0.35em] text-Ink mt-1">N O J O O M</div>
           </Link>
-          <p className="font-Body text-xs text-Muted_Light">
-            &copy; 2026 Nojoom. Crafted in Cairo, Egypt.
-          </p>
+          <div className="flex items-center gap-6">
+            <p className="font-Body text-xs text-Muted_Light">
+              &copy; 2026 Nojoom. Crafted in Cairo, Egypt.
+            </p>
+            <a
+              href="/NOJOOM/admin/"
+              className="font-Body text-xs text-Muted_Light hover:text-Ink transition-colors border-l border-Border_Light pl-6"
+            >
+              Admin Panel
+            </a>
+          </div>
         </div>
       </div>
     </footer>
